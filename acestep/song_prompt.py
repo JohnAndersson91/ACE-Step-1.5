@@ -7,6 +7,13 @@ import gradio as gr
 
 
 PRESETS = {
+    "Melodic guitar metal": ("mid-tempo melodic death metal with neoclassical lead guitar",
+        "electric-guitar-led intro, harmonized twin leads, harmonic-minor runs, sweep arpeggios, "
+        "palm-muted rhythm guitars, electric bass and acoustic drums",
+        "dark, defiant, triumphant", "prominent clean female lead singing the supplied English lyrics",
+        "guitar intro, contrasting verses and repeated choruses, bridge, final chorus; "
+        "only two brief high-register female screams near the end",
+        "guitars in front, clear vocal diction, natural drum attack, distinct instruments"),
     "Female melodic metal": ("melodic metal", "distorted rhythm guitars, electric bass, acoustic drums",
         "resilient, emotional", "expressive female alto, clear diction, restrained vibrato",
         "intimate verse, powerful chorus", "clear separation, natural dynamics, warm lead vocal"),
@@ -56,16 +63,16 @@ def load_preset(name):
     """Return editable defaults; never change the user's actual lyrics."""
     if name not in PRESETS:
         raise gr.Error("Choose a prompt preset.")
-    return (*PRESETS[name],name!="Female melodic metal")
+    return (*PRESETS[name],name in {"Acoustic cover backing","Piano cover backing"})
 
 
 def build_song_prompt(captions, instrumental_checkbox):
     """Offer a small caption builder connected to the real generation inputs."""
     with gr.Accordion("✨ Help me describe my song",open=False):
         gr.Markdown("Pick a starting point, adjust it, then press **Apply**.")
-        preset = gr.Dropdown(list(PRESETS),value="Female melodic metal",label="Starting point")
+        preset = gr.Dropdown(list(PRESETS),value="Melodic guitar metal",label="Starting point")
         load = gr.Button("Load starting point into builder")
-        defaults = PRESETS["Female melodic metal"]
+        defaults = PRESETS["Melodic guitar metal"]
         fields = [gr.Textbox(value=value,label=label) for value,label in zip(defaults,
             ("Genre","Instruments","Mood","Voice","Delivery / arrangement","Production"))]
         instrumental = gr.Checkbox(value=False,label="Instrumental backing for me to sing over")

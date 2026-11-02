@@ -24,7 +24,7 @@ def build_vocal_song(dit_handler,llm_handler):
             """Bind the existing model handlers without installing or loading another model."""
             return generate_backing(path,description,strength,variation,dit_handler,llm_handler)
 
-        action.click(generate,[vocal,prompt,influence,seed],[backing,saved,status])
+        action.click(generate,[vocal,prompt,influence,seed],[backing,saved,status],concurrency_id="music_gpu",concurrency_limit=1)
         with gr.Accordion("🎚 Mix my real voice with the backing",open=False):
             voice_level = gr.Slider(0,2,value=1,step=0.05,label="My voice level")
             backing_level = gr.Slider(0,2,value=0.5,step=0.05,label="Backing level")

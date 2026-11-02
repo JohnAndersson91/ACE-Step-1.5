@@ -87,8 +87,8 @@ def build_custom_mode_controls() -> dict[str, Any]:
                             )
                     with gr.Column(scale=1):
                         lyrics = gr.Textbox(
-                            label="Lyrics (optional)",
-                            placeholder=t("generation.lyrics_placeholder"),
+                            label="Lyrics — needed for singing",
+                            placeholder="[Verse 1]\nYour verse words...\n\n[Chorus]\nYour repeated hook...\n\n[Bridge]\nA contrasting section...",
                             lines=6,
                             max_lines=12,
                         )

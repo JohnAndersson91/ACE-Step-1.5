@@ -26,6 +26,11 @@ def build_optional_parameter_controls(
         A component map containing optional metadata fields and auto-toggle controls.
     """
 
+    with gr.Row():
+        audio_duration = gr.Number(label="Song length (seconds)",value=min(180,max_duration),
+            minimum=10,maximum=float(max_duration),step=1,interactive=True)
+        batch_size_input = gr.Number(label="How many versions?",value=default_batch_size,
+            minimum=1,maximum=max_batch_size,step=1,interactive=not service_mode)
     with gr.Accordion(
         t("generation.optional_params"),
         open=False,
@@ -60,12 +65,12 @@ def build_optional_parameter_controls(
             )
             vocal_language = gr.Dropdown(
                 choices=[(lang if lang != "unknown" else "Instrumental / auto", lang) for lang in VALID_LANGUAGES],
-                value="unknown",
+                value="en",
                 label=t("generation.vocal_language_label"),
                 info=t("generation.vocal_language_info"),
                 allow_custom_value=True,
                 elem_classes=["has-info-container"],
-                interactive=False,
+                interactive=True,
             )
         with gr.Row(elem_classes=["auto-toggles-row"]):
             bpm_auto = gr.Checkbox(
@@ -88,36 +93,14 @@ def build_optional_parameter_controls(
             )
             vocal_lang_auto = gr.Checkbox(
                 label=t("generation.vocal_lang_auto_label"),
-                value=True,
+                value=False,
                 container=False,
                 elem_classes=["auto-toggle"],
-            )
-        with gr.Row():
-            audio_duration = gr.Number(
-                label=t("generation.duration_label"),
-                value=-1,
-                minimum=-1,
-                maximum=float(max_duration),
-                step=0.1,
-                info=t("generation.duration_info")
-                + f" (Max: {max_duration}s / {max_duration // 60} min)",
-                elem_classes=["has-info-container"],
-                interactive=False,
-            )
-            batch_size_input = gr.Number(
-                label=t("generation.batch_size_label"),
-                value=default_batch_size,
-                minimum=1,
-                maximum=max_batch_size,
-                step=1,
-                info=t("generation.batch_size_info") + f" (Max: {max_batch_size})",
-                elem_classes=["has-info-container"],
-                interactive=not service_mode,
             )
         with gr.Row(elem_classes=["auto-toggles-row"]):
             duration_auto = gr.Checkbox(
                 label=t("generation.duration_auto_label"),
-                value=True,
+                value=False,
                 container=False,
                 elem_classes=["auto-toggle"],
             )

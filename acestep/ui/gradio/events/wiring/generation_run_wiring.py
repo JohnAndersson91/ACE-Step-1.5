@@ -26,6 +26,12 @@ def register_generation_run_handlers(context: GenerationWiringContext) -> None:
     dit_handler = context.dit_handler
     llm_handler = context.llm_handler
 
+    def clear_checked(lyrics,task_type):
+        """Validate vocal words before clearing the previous generation's players."""
+        from acestep.songwriting import check_vocal_lyrics
+        check_vocal_lyrics(task_type,lyrics)
+        return res_h.clear_audio_outputs_for_new_generation()
+
     def generation_wrapper(*args):
         """Proxy passthrough to `res_h.generate_with_batch_management`.
 
@@ -45,7 +51,8 @@ def register_generation_run_handlers(context: GenerationWiringContext) -> None:
         yield from res_h.generate_with_batch_management(dit_handler, llm_handler, *args)
 
     generation_section["generate_btn"].click(
-        fn=res_h.clear_audio_outputs_for_new_generation,
+        fn=clear_checked,
+        inputs=[generation_section["lyrics"],generation_section["task_type"]],
         outputs=[
             results_section["generated_audio_1"],
             results_section["generated_audio_2"],
@@ -57,7 +64,8 @@ def register_generation_run_handlers(context: GenerationWiringContext) -> None:
             results_section["generated_audio_8"],
             results_section["generated_audio_batch"],
         ],
-    ).then(
+    ).success(
+        concurrency_id="music_gpu",concurrency_limit=1,
         fn=generation_wrapper,
         inputs=[
             generation_section["captions"],

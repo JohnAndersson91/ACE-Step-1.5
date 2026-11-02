@@ -85,6 +85,8 @@ def generate_with_progress(
         Tuple of Gradio component updates for the 52-output generate event.
     """
     # GPU memory validation
+    from acestep.songwriting import check_vocal_lyrics
+    check_vocal_lyrics(task_type,lyrics)
     gpu_config = get_global_gpu_config()
     lm_initialized = llm_handler.llm_initialized if llm_handler else False
 
