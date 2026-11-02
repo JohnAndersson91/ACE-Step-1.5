@@ -26,10 +26,12 @@ def register_generation_run_handlers(context: GenerationWiringContext) -> None:
     dit_handler = context.dit_handler
     llm_handler = context.llm_handler
 
-    def clear_checked(lyrics,task_type):
+    def clear_checked(lyrics,task_type,duration):
         """Validate vocal words before clearing the previous generation's players."""
         from acestep.songwriting import check_vocal_lyrics
         check_vocal_lyrics(task_type,lyrics)
+        from acestep.style_request import check_song_length
+        check_song_length(task_type,duration)
         return res_h.clear_audio_outputs_for_new_generation()
 
     def generation_wrapper(*args):
@@ -52,7 +54,7 @@ def register_generation_run_handlers(context: GenerationWiringContext) -> None:
 
     generation_section["generate_btn"].click(
         fn=clear_checked,
-        inputs=[generation_section["lyrics"],generation_section["task_type"]],
+        inputs=[generation_section["lyrics"],generation_section["task_type"],generation_section["audio_duration"]],
         outputs=[
             results_section["generated_audio_1"],
             results_section["generated_audio_2"],

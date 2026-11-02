@@ -73,7 +73,7 @@ class SongwritingTests(unittest.TestCase):
         self.assertEqual(compute_init_defaults(None,"en")["default_batch_size"],1)
         with gr.Blocks():
             controls = build_optional_parameter_controls(480,2,1,False)
-        self.assertEqual(controls["audio_duration"].value,180)
+        self.assertIsNone(controls["audio_duration"].value)
         self.assertTrue(controls["audio_duration"].interactive)
         self.assertFalse(controls["duration_auto"].value)
         self.assertEqual(controls["vocal_language"].value,"en")

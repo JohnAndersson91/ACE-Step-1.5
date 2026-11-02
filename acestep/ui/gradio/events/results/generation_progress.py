@@ -87,6 +87,9 @@ def generate_with_progress(
     # GPU memory validation
     from acestep.songwriting import check_vocal_lyrics
     check_vocal_lyrics(task_type,lyrics)
+    from acestep.style_request import check_song_length,expand_style_request
+    check_song_length(task_type,audio_duration)
+    captions,_ = expand_style_request(captions)
     gpu_config = get_global_gpu_config()
     lm_initialized = llm_handler.llm_initialized if llm_handler else False
 

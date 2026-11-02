@@ -50,6 +50,8 @@ def generate_backing(path,description,strength,seed,dit_handler,llm_handler):
     except (ValueError,TypeError,OverflowError) as error:
         raise gr.Error("Use a whole-number variation seed between 0 and 2147483647.") from error
     vocal,duration = prepare_vocal(path)
+    from acestep.style_request import expand_style_request
+    description,_ = expand_style_request(description)
     caption = "Instrumental accompaniment, space for a live singer. "+description
     params = GenerationParams(task_type="cover",src_audio=str(vocal),caption=caption,
         lyrics="",instrumental=True,duration=duration,audio_cover_strength=float(strength),

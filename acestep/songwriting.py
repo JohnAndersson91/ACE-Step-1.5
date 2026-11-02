@@ -25,7 +25,7 @@ def check_vocal_lyrics(task_type,lyrics):
 
 def draft_lyrics(idea,style,duration,dit_handler=None):
     """Run only the installed writer in a temporary process and return a reviewable draft."""
-    if not str(idea or "").strip() or len(str(idea))>2000 or len(str(style))>2000 or not 30<=duration<=480:
+    if not str(idea or "").strip() or len(str(idea))>2000 or len(str(style))>3000 or duration is None or not 30<=duration<=480:
         raise gr.Error("Describe the story briefly and choose a song length of 30–480 seconds.")
     root = Path(__file__).resolve().parents[1]
     if not (root/"checkpoints/acestep-5Hz-lm-1.7B/model.safetensors").exists():

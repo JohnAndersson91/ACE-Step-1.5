@@ -27,7 +27,7 @@ def build_optional_parameter_controls(
     """
 
     with gr.Row():
-        audio_duration = gr.Number(label="Song length (seconds)",value=min(180,max_duration),
+        audio_duration = gr.Number(label="Choose song length (seconds)",value=None,
             minimum=10,maximum=float(max_duration),step=1,interactive=True)
         batch_size_input = gr.Number(label="How many versions?",value=default_batch_size,
             minimum=1,maximum=max_batch_size,step=1,interactive=not service_mode)
