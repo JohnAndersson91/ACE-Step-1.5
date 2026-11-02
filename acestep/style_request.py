@@ -21,10 +21,11 @@ def expand_style_request(text):
         intro = "intro" in match.group().lower() or bool(re.search(r"intro.{0,25}$",prefix,re.I))
         scope = "Intro direction" if intro else "Musical direction"
         matched.append("Children of Bodom → melodic / neoclassical metal guitar traits")
-        return (scope+": Finnish melodic death-metal and neoclassical-metal influences, "
+        return (scope+": neoclassical and melodic-metal GUITAR PLAYING ONLY, "
             "a dominant electric-guitar lead, harmonic-minor melodic phrases, alternate-picked runs, "
             "sweep-picked arpeggios, harmonized lead lines and tight palm-muted supporting riffs. "
-            "Write a new melody rather than quoting a particular recording")
+            "Write a new melody rather than quoting a particular recording. "
+            "This guitar reference does not select the vocalist, vocal gender or harsh vocal style")
 
     return BODOM.sub(replace,text),matched
 

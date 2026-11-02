@@ -15,6 +15,7 @@ from acestep.vocal_song_ui import build_vocal_song
 from acestep.songwriting import build_songwriting
 from acestep.style_request_ui import build_style_direction
 from acestep.reference_analysis_ui import build_reference_analysis
+from acestep.sound_palette_ui import build_sound_palette
 
 from .generation_defaults import compute_init_defaults, resolve_is_pure_base_model
 from .generation_tab_primary_controls import (
@@ -87,6 +88,7 @@ def create_generation_tab_section(
                     repainting_controls = build_repainting_controls()
                 simple_mode_controls = build_simple_mode_controls()
                 custom_mode_controls = build_custom_mode_controls()
+                build_sound_palette(custom_mode_controls,hidden_state_controls["lyrics_before_instrumental"])
                 build_vocal_song(dit_handler,llm_handler)
                 build_song_prompt(custom_mode_controls["captions"], custom_mode_controls["instrumental_checkbox"])
                 optional_controls = build_optional_parameter_controls(

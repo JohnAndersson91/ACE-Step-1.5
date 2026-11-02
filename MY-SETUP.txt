@@ -28,3 +28,10 @@ without checking. Analysis runs offline in a temporary process, then releases th
 No new model is downloaded. Analysis does not identify every song, copy its arrangement,
 or guarantee that generation follows the reference or produces natural vocals.
 Reference clips and analysis logs are kept under acestep_output/reference-analysis.
+
+General sound choices
+In Create a song, open Instruments & vocal sound. Pick intro/main instruments,
+singer lineup, delivery and recording sound. Preview, then Apply these sound choices.
+Defaults keep your request. The continuous solo vocal option removes separate scream
+headings but keeps lyric words. Singer identity and instrument realism still need listening.
+See docs/en/LOCAL_SOUND_SYSTEM.md for changes, limits and researched sources.
