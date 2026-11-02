@@ -5,6 +5,7 @@ from typing import Any
 import gradio as gr
 
 from acestep.constants import GENERATION_MODES_BASE, GENERATION_MODES_TURBO
+from acestep.practice_audio import build_practice_controls
 
 from .generation_defaults import compute_init_defaults, resolve_is_pure_base_model
 from .generation_tab_primary_controls import (
@@ -75,6 +76,7 @@ def create_generation_tab_section(
         variation_morph_controls = build_variation_morph_controls()
         cover_controls = build_cover_strength_controls()
         custom_mode_controls = build_custom_mode_controls()
+        build_practice_controls(source_track_code_controls["src_audio"], custom_mode_controls["lyrics"])
         repainting_controls = build_repainting_controls()
         optional_controls = build_optional_parameter_controls(
             max_duration=max_duration,
