@@ -20,6 +20,7 @@ import torch
 import numpy as np
 import torchaudio
 from loguru import logger
+from acestep.ffmpeg_path import ffmpeg_executable
 
 
 def apply_fade(
@@ -172,7 +173,7 @@ class AudioSaver:
                 format="WAV",
             )
             cmd = [
-                'ffmpeg', '-y', '-hide_banner', '-loglevel', 'error',
+                ffmpeg_executable(), '-y', '-hide_banner', '-loglevel', 'error',
                 '-i', str(temp_wav_path),
                 '-codec:a', 'libmp3lame',
                 '-ar', str(int(target_sample_rate)),
