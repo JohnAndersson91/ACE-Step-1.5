@@ -12,3 +12,19 @@ GitHub: personal/local-setup is your working branch.
 origin is your fork; upstream is the original ACE-Step project.
 Models, the Python environment, and generated audio stay on this PC.
 Use GitHub Desktop to commit and push changes to the program.
+
+Reference sound workflow
+1. In Create a song, open Use a reference section.
+2. Upload an audio file and select a 10-30 second section (for example, the guitar intro).
+3. Press Prepare selected section. This makes a playable clip without AI analysis.
+4. Optionally describe the instruments or playing you want in What sound should it use?
+5. Keep Use this clip as sound guidance checked to send the actual clip to generation.
+6. Press Use this reference in my song. Your existing request is kept and traits are appended.
+7. Keep/add your own lyrics, choose a song length, and generate one short preview first.
+
+An optional experimental automatic description is disabled by default. In testing the
+installed model produced questionable instrument/style descriptions. Do not trust them
+without checking. Analysis runs offline in a temporary process, then releases the model.
+No new model is downloaded. Analysis does not identify every song, copy its arrangement,
+or guarantee that generation follows the reference or produces natural vocals.
+Reference clips and analysis logs are kept under acestep_output/reference-analysis.

@@ -1,4 +1,4 @@
-"""Draft English song lyrics with the existing local language model, then release RAM."""
+"""Draft lyrics or describe real audio with the installed model, then release RAM."""
 import json
 from pathlib import Path
 import sys
@@ -35,6 +35,17 @@ def main():
         handler.llm = torch.ao.quantization.quantize_dynamic(
             handler.llm,{torch.nn.Linear},dtype=torch.qint8,inplace=True)
     handler.max_model_len = min(handler.max_model_len,2048)
+    if request.get("mode") == "reference":
+        from acestep.inference import understand_music
+        codes = request.get("audio_codes", "")
+        if "<|audio_code_" not in codes:
+            raise ValueError("Reference analysis requires real audio codes.")
+        result = understand_music(handler, codes, temperature=0.3)
+        if not result.success or not result.caption.strip():
+            raise RuntimeError("The local analyzer returned no description: " + result.status_message)
+        output.write_text(json.dumps(dict(caption=result.caption, bpm=result.bpm,
+            key=result.keyscale), ensure_ascii=False), encoding="utf-8")
+        return
     query = (f"{request['idea']}\nMusic: {request['style']}\n"
         f"Write an original English song for approximately {request['duration']} seconds. "
         "Use [Verse 1], [Chorus], [Verse 2], [Chorus], [Bridge], [Final Chorus] headings. "

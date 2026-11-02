@@ -14,6 +14,7 @@ from acestep.song_prompt import build_song_prompt
 from acestep.vocal_song_ui import build_vocal_song
 from acestep.songwriting import build_songwriting
 from acestep.style_request_ui import build_style_direction
+from acestep.reference_analysis_ui import build_reference_analysis
 
 from .generation_defaults import compute_init_defaults, resolve_is_pure_base_model
 from .generation_tab_primary_controls import (
@@ -95,6 +96,7 @@ def create_generation_tab_section(
                     custom_mode_controls["captions"],optional_controls["audio_duration"],
                     hidden_state_controls["lyrics_before_instrumental"],dit_handler)
                 build_style_direction(custom_mode_controls,optional_controls)
+                build_reference_analysis(custom_mode_controls,optional_controls,dit_handler)
                 generate_controls = build_generate_row_controls(
                     service_pre_initialized=service_pre_initialized,init_params=init_params,
                     lm_initialized=lm_initialized,service_mode=service_mode)
