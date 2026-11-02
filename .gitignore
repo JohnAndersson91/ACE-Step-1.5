@@ -253,6 +253,7 @@ config.json
 
 acestep_output/
 # macOS
+.gradio/
 .DS_Store
 
 # VitePress / Node

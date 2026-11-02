@@ -31,6 +31,19 @@ class PracticeTests(unittest.TestCase):
             with self.assertRaises(gr.Error):
                 trim_audio(source, 2, 1)
 
+    def test_quality_model_selection(self):
+        """Quality mode selects the fine-tuned ensemble; quick mode stays unchanged."""
+        for quality, model in [("Quick", "htdemucs"),
+                               ("Higher quality (slower)", "htdemucs_ft")]:
+            with patch("acestep.practice_audio.subprocess.run") as run, \
+                 patch("torch.cuda.is_available", return_value=False):
+                backing, vocals = split_audio("example.wav", quality)
+                self.assertIn(model, run.call_args.args[0])
+                self.assertIn(model, backing)
+                self.assertTrue(vocals.endswith("vocals.wav"))
+        with self.assertRaises(gr.Error):
+            split_audio("example.wav", "invalid")
+
 
 if __name__ == "__main__":
     unittest.main()
