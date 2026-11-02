@@ -14,7 +14,7 @@ import os
 import random
 import tempfile
 from typing import Optional, Union, List, Dict, Any, Tuple
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field, asdict, replace
 from loguru import logger
 import numpy as np
 import torch
@@ -84,7 +84,7 @@ class GenerationParams:
         use_adg: Whether to use Adaptive Dual Guidance (only works for base model).
         cfg_interval_start: Start ratio (0.0–1.0) to apply CFG.
         cfg_interval_end: End ratio (0.0–1.0) to apply CFG.
-        shift: Timestep shift factor (default 1.0). When != 1.0, applies t = shift * t / (1 + (shift - 1) * t) to timesteps.
+        shift: Timestep shift; omitted uses 3.0 for Turbo and 1.0 otherwise. Explicit values are kept.
         
         # Task-Specific Parameters
         task_type: Type of generation task. One of: "text2music", "cover", "repaint", "lego", "extract", "complete".
@@ -148,7 +148,7 @@ class GenerationParams:
     use_adg: bool = False
     cfg_interval_start: float = 0.0
     cfg_interval_end: float = 1.0
-    shift: float = 1.0
+    shift: Optional[float] = None
     infer_method: str = "ode"  # "ode" or "sde" - diffusion inference method
     sampler_mode: str = "euler"  # "euler" (first-order) or "heun" (second-order predictor-corrector)
     velocity_norm_threshold: float = 0.0  # Clamp velocity prediction norms (0 = disabled, try 2.0)
@@ -531,6 +531,10 @@ def generate_music(
         GenerationResult with generated audio files and metadata
     """
     try:
+        if params.shift is None:
+            from acestep.sampling_defaults import resolve_sampling_shift
+            is_turbo = getattr(dit_handler, "is_turbo_model", lambda: False)()
+            params = replace(params, shift=resolve_sampling_shift(None, is_turbo))
         # Phase 1: LM-based metadata and code generation (if enabled)
         # Flow-edit overlay on text2music must use the *VAE encoding* of
         # ``src_audio`` as the V_delta integration's starting latent, not

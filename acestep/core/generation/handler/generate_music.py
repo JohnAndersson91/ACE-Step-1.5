@@ -13,6 +13,7 @@ import torch
 from loguru import logger
 
 from acestep.constants import DEFAULT_DIT_INSTRUCTION
+from acestep.sampling_defaults import resolve_sampling_shift
 from acestep.core.generation.handler.repaint_waveform_splice import (
     apply_repaint_waveform_splice,
 )
@@ -219,7 +220,7 @@ class GenerateMusicMixin:
         use_adg: bool = False,
         cfg_interval_start: float = 0.0,
         cfg_interval_end: float = 1.0,
-        shift: float = 1.0,
+        shift: Optional[float] = None,
         infer_method: str = "ode",
         sampler_mode: str = "euler",
         velocity_norm_threshold: float = 0.0,
@@ -260,6 +261,7 @@ class GenerateMusicMixin:
             guidance_scale: CFG guidance value.
             seed: Optional explicit seed from caller/UI.
             infer_method: Diffusion method name.
+            shift: Omitted uses 3.0 for Turbo and 1.0 otherwise; explicit values are kept.
             dcw_enabled: Enable Differential Correction in Wavelet domain.
                 ``None`` selects the default for the loaded model family.
             dcw_mode: DCW mode — ``"low"`` / ``"high"`` / ``"double"`` / ``"pix"``.
@@ -316,6 +318,7 @@ class GenerateMusicMixin:
                 guidance_scale,
             )
             guidance_scale = 1.0
+        shift = resolve_sampling_shift(shift, self.is_turbo_model())
         dcw_enabled = self._resolve_dcw_enabled(dcw_enabled)
 
         # When LoRA is active, verify all decoder parameters are on the
