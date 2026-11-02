@@ -90,6 +90,8 @@ def build_practice_controls(source: gr.Audio, lyrics: gr.Textbox) -> None:
         trim = gr.Button("Make short practice backing")
         excerpt = gr.Audio(label="Short practice backing", type="filepath")
         trim.click(trim_audio, [instrumental, start, end], excerpt)
+        from acestep.practice_countin import build_countin
+        build_countin(excerpt)
         draft = gr.Button("Transcribe vocals into draft lyrics")
         viewer = gr.Textbox(label="Practice lyrics (editable)", lines=18, interactive=True)
         gr.Markdown("Automatic lyrics may be inaccurate. Correct them before singing.")

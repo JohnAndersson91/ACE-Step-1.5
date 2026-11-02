@@ -10,6 +10,7 @@ from acestep.music_workflows import build_workflow_guide
 from acestep.reconstruction_ui import build_reconstruction_ui
 from acestep.correction_lab import build_correction_lab
 from acestep.transcription_options import build_transcription_options
+from acestep.song_prompt import build_song_prompt
 
 from .generation_defaults import compute_init_defaults, resolve_is_pure_base_model
 from .generation_tab_primary_controls import (
@@ -84,6 +85,7 @@ def create_generation_tab_section(
         variation_morph_controls = build_variation_morph_controls()
         cover_controls = build_cover_strength_controls()
         custom_mode_controls = build_custom_mode_controls()
+        build_song_prompt(custom_mode_controls["captions"], custom_mode_controls["instrumental_checkbox"])
         build_practice_controls(source_track_code_controls["src_audio"], custom_mode_controls["lyrics"])
         repainting_controls = build_repainting_controls()
         optional_controls = build_optional_parameter_controls(
