@@ -1,0 +1,14 @@
+Personal local music setup
+
+Start: double-click Start Music.bat, then open http://127.0.0.1:7860.
+Keep its console window open while making music. Close it to stop the server.
+
+Hardware: RTX 3070 Ti (8 GB VRAM), 16 GB RAM.
+Model: ACE-Step 1.5 Turbo, CPU offload enabled, language model disabled
+to conserve memory. Use the detailed caption and lyrics fields directly.
+Start with one short instrumental before generating longer songs.
+
+GitHub: personal/local-setup is your working branch.
+origin is your fork; upstream is the original ACE-Step project.
+Models, the Python environment, and generated audio stay on this PC.
+Use GitHub Desktop to commit and push changes to the program.
