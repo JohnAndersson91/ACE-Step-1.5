@@ -51,14 +51,9 @@ def build_recorder(vocals: gr.Audio) -> None:
     from acestep.vocal_monitor import build_monitor
 
     with gr.Accordion("Record my vocals / receive phone recordings", open=False):
-        gr.Markdown("Use headphones. Play the backing separately and record your voice here. "
-                    "This saves a separate vocal take; it does not automatically align it to the backing.")
+        from acestep.practice_session import build_session
+        build_session(vocals)
         build_monitor()
-        recording = gr.Audio(label="My dry vocal take", sources=["microphone", "upload"],
-                             type="filepath", format="wav")
-        save = gr.Button("Save my vocal take on PC")
-        status = gr.Textbox(label="Recording status", interactive=False)
-        save.click(save_take, recording, [vocals, status])
         takes = gr.Dropdown(label="Saved takes (including phone uploads)", choices=[])
         refresh = gr.Button("Refresh saved takes")
         refresh.click(list_takes, outputs=takes)
