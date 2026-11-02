@@ -8,6 +8,7 @@ from acestep.constants import GENERATION_MODES_BASE, GENERATION_MODES_TURBO
 from acestep.practice_audio import build_practice_controls
 from acestep.music_workflows import build_workflow_guide
 from acestep.reconstruction_ui import build_reconstruction_ui
+from acestep.correction_lab import build_correction_lab
 
 from .generation_defaults import compute_init_defaults, resolve_is_pure_base_model
 from .generation_tab_primary_controls import (
@@ -75,6 +76,7 @@ def create_generation_tab_section(
         simple_mode_controls = build_simple_mode_controls()
         source_track_code_controls = build_source_track_and_code_controls()
         build_reconstruction_ui(source_track_code_controls["src_audio"])
+        build_correction_lab()
         # Retake + Edit accordion sits right under LM codes Hints so the
         # variation knobs are next to the source-audio inputs they apply to.
         variation_morph_controls = build_variation_morph_controls()
