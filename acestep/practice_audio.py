@@ -33,12 +33,19 @@ def split_audio(path: str, quality: str = "Quick") -> tuple[str, str]:
     """Separate a local recording into instrumental and vocal WAV files."""
     if not path:
         raise gr.Error("Upload or import a recording first.")
-    if quality not in {"Quick", "Higher quality (slower)"}:
+    if quality not in {"Quick", "Higher quality (slower)", "RoFormer (test)"}:
         raise gr.Error("Choose a separation quality.")
     model = "htdemucs_ft" if quality != "Quick" else "htdemucs"
     import torch
     device = "cuda" if torch.cuda.is_available() else "cpu"
     folder = Path(__file__).resolve().parents[1] / "acestep_output" / "stems" / uuid4().hex
+    if quality == "RoFormer (test)":
+        try:
+            subprocess.run([sys.executable, "-m", "acestep.roformer_worker", path, str(folder)],
+                           check=True, capture_output=True, timeout=1800)
+        except subprocess.SubprocessError as error:
+            raise gr.Error("RoFormer could not finish. Try a shorter clip or another quality.") from error
+        return str(folder / "instrumental.wav"), str(folder / "vocals.wav")
     try:
         subprocess.run(
             [sys.executable, "-m", "demucs", "--two-stems", "vocals", "-n", model,
@@ -67,8 +74,8 @@ def build_practice_controls(source: gr.Audio, lyrics: gr.Textbox) -> None:
     """Build a practice workspace that also displays the generation lyrics."""
     with gr.Accordion("Vocal practice, stems and lyrics", open=False):
         gr.Markdown("Import/upload a song above, then separate it. CPU separation can take a few minutes.")
-        split = gr.Button("Separate source into instrumental and vocals")
-        quality = gr.Radio(["Quick", "Higher quality (slower)"], value="Higher quality (slower)",
+        split = gr.Button("Make instrumental from source song", variant="primary")
+        quality = gr.Radio(["Quick", "Higher quality (slower)", "RoFormer (test)"], value="RoFormer (test)",
                            label="Separation quality")
         gr.Markdown("Separation preserves the recording's timing but can leave artifacts. "
                     "An exact clean instrumental is not guaranteed. Remix generation changes the music.")

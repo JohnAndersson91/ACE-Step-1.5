@@ -44,6 +44,14 @@ class PracticeTests(unittest.TestCase):
         with self.assertRaises(gr.Error):
             split_audio("example.wav", "invalid")
 
+    def test_roformer_routes_to_isolated_worker(self):
+        """RoFormer uses a separate process and returns stable stem filenames."""
+        with patch("acestep.practice_audio.subprocess.run") as run:
+            backing, vocals = split_audio("example.wav", "RoFormer (test)")
+            self.assertIn("acestep.roformer_worker", run.call_args.args[0])
+            self.assertTrue(backing.endswith("instrumental.wav"))
+            self.assertTrue(vocals.endswith("vocals.wav"))
+
 
 if __name__ == "__main__":
     unittest.main()

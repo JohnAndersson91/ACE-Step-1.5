@@ -6,6 +6,7 @@ import gradio as gr
 
 from acestep.constants import GENERATION_MODES_BASE, GENERATION_MODES_TURBO
 from acestep.practice_audio import build_practice_controls
+from acestep.music_workflows import build_workflow_guide
 
 from .generation_defaults import compute_init_defaults, resolve_is_pure_base_model
 from .generation_tab_primary_controls import (
@@ -67,6 +68,7 @@ def create_generation_tab_section(
     initial_mode_choices = GENERATION_MODES_BASE if is_pure_base_model else GENERATION_MODES_TURBO
 
     with gr.Group():
+        build_workflow_guide()
         mode_controls = build_mode_selector_controls(initial_mode_choices)
         hidden_state_controls = build_hidden_generation_state()
         simple_mode_controls = build_simple_mode_controls()
