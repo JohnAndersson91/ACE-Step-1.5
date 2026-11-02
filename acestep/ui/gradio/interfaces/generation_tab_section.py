@@ -11,6 +11,7 @@ from acestep.reconstruction_ui import build_reconstruction_ui
 from acestep.correction_lab import build_correction_lab
 from acestep.transcription_options import build_transcription_options
 from acestep.song_prompt import build_song_prompt
+from acestep.vocal_song_ui import build_vocal_song
 
 from .generation_defaults import compute_init_defaults, resolve_is_pure_base_model
 from .generation_tab_primary_controls import (
@@ -83,6 +84,7 @@ def create_generation_tab_section(
                     repainting_controls = build_repainting_controls()
                 simple_mode_controls = build_simple_mode_controls()
                 custom_mode_controls = build_custom_mode_controls()
+                build_vocal_song(dit_handler,llm_handler)
                 build_song_prompt(custom_mode_controls["captions"], custom_mode_controls["instrumental_checkbox"])
                 optional_controls = build_optional_parameter_controls(
                     max_duration=max_duration,max_batch_size=max_batch_size,
