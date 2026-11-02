@@ -64,6 +64,8 @@ def build_practice_controls(source: gr.Audio, lyrics: gr.Textbox) -> None:
         split = gr.Button("Separate source into instrumental and vocals")
         instrumental = gr.Audio(label="Instrumental backing", type="filepath")
         vocals = gr.Audio(label="Isolated vocals / vocal recording", type="filepath")
+        from acestep.vocal_recording import build_recorder
+        build_recorder(vocals)
         split.click(split_audio, source, [instrumental, vocals])
         with gr.Row():
             start = gr.Number(value=0, label="Practice start (seconds)")
