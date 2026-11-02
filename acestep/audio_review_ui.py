@@ -14,10 +14,11 @@ def build_audio_review(first,second):
             "For a weak section, use Send To Repaint above, generate a repair, then patch it into a new copy below.")
         start = gr.Number(value=0,label="Comparison start (seconds)")
         duration = gr.Slider(1,60,value=25,step=1,label="Comparison duration (seconds)")
+        loudness = gr.Checkbox(value=True,label="Match listening volume (recommended)")
         action = gr.Button("Compare generated Sample 1 and Sample 2")
         player = build_comparison_player()
         report = gr.JSON(label="Technical checks — not a musical-quality rating")
-        action.click(compare_versions,[first,second,start,duration],[player,report])
+        action.click(compare_versions,[first,second,start,duration,loudness],[player,report])
         with gr.Accordion("Compare other saved audio files",open=False):
             demos = Path(__file__).resolve().parents[1]/"acestep_output/review-auditions"
             gr.Markdown("Any preloaded files below are original-song tests, not remakes of your reference song.")
@@ -26,7 +27,7 @@ def build_audio_review(first,second):
             upload_b = gr.Audio(value=str(demos/"B.wav") if (demos/"B.wav").exists() else None,
                 label="Version B file",type="filepath")
             compare = gr.Button("Compare these saved files")
-            compare.click(compare_versions,[upload_a,upload_b,start,duration],[player,report])
+            compare.click(compare_versions,[upload_a,upload_b,start,duration,loudness],[player,report])
         with gr.Accordion("Insert a repaired section into a new copy",open=False):
             original = gr.Audio(label="Original song to preserve",type="filepath")
             replacement = gr.Audio(label="Replacement audio from Repaint or your editor",type="filepath")

@@ -41,29 +41,41 @@ def audio_metrics(audio,rate):
             "possible_level_drop_seconds":drops}
 
 
-def compare_versions(first,second,start,duration):
-    """Create RMS-matched previews by attenuation only, leaving source files intact."""
+def compare_versions(first,second,start,duration,perceived_loudness=False):
+    """Create level-matched previews by constant attenuation, leaving sources intact."""
     from acestep.comparison_player import comparison_markup
     clips = [read_clip(path,start,duration) for path in (first,second)]
     levels = [float(np.sqrt(np.mean(audio.astype(np.float64)**2))) for audio,_ in clips]
     if min(levels)<1e-8:
         raise gr.Error("One version is silent; choose another excerpt.")
     target = min(*levels,0.025)
+    gains = [target / level for level in levels]
+    measurements = None
+    if perceived_loudness:
+        from acestep.loudness_comparison import comparison_gains, measure_loudness
+        measurements = [measure_loudness(audio,rate) for audio,rate in clips]
+        if all(item is not None for item in measurements):
+            gains = comparison_gains(measurements)
+        else:
+            measurements = None
     folder = ROOT/uuid4().hex
     folder.mkdir(parents=True)
     paths,report = [],{}
-    for label,(audio,rate),level in zip(("A","B"),clips,levels):
+    for index,(label,(audio,rate),gain) in enumerate(zip(("A","B"),clips,gains)):
         report[label] = audio_metrics(audio,rate)
-        scaled = audio*(target/level)
-        peak = float(abs(scaled).max())
-        if peak>0.8:
-            # Apply the same further attenuation to both previews below.
-            target *= 0.8/peak
-    for label,(audio,rate),level in zip(("A","B"),clips,levels):
+        if measurements:
+            report[label].update(measurements[index])
+    peak = max(float(abs(audio).max())*gain for (audio,_),gain in zip(clips,gains))
+    ceiling_gain = min(1.0,0.8/max(peak,1e-12))
+    for label,(audio,rate),gain in zip(("A","B"),clips,gains):
         path = folder/f"{label}.wav"
-        sf.write(path,audio*(target/level),rate,subtype="PCM_24")
+        sf.write(path,audio*gain*ceiling_gain,rate,subtype="PCM_24")
         paths.append(str(path))
+    report["playback_matching"] = "Integrated LUFS" if measurements else "RMS"
+    if perceived_loudness and not measurements:
+        report["matching_notice"] = "LUFS unavailable for this excerpt; used RMS matching."
     report["note"] = ("RMS matching is approximate perceived-loudness matching. Drops may be intentional. "
+                      "Playback uses constant attenuation only; no compression, tuning or denoising. "
                       "These checks do not measure tuning, natural vocals, instrument accuracy or song similarity.")
     return comparison_markup(*paths,labels=("Version A — level matched","Version B — level matched")),report
 
