@@ -5,6 +5,7 @@ from typing import Any
 import gradio as gr
 
 from acestep.constants import TRACK_NAMES
+from acestep.local_audio_import import build_import_controls
 from acestep.ui.gradio.help_content import create_help_button
 from acestep.ui.gradio.i18n import t
 
@@ -27,6 +28,8 @@ def build_source_audio_controls() -> dict[str, Any]:
                 variant="secondary",
                 size="lg",
             )
+
+    build_import_controls(src_audio)
 
     with gr.Group(visible=False) as extract_help_group:
         create_help_button("generation_extract")
