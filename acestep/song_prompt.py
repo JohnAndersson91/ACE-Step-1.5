@@ -61,11 +61,8 @@ def load_preset(name):
 
 def build_song_prompt(captions, instrumental_checkbox):
     """Offer a small caption builder connected to the real generation inputs."""
-    with gr.Accordion("Build a song prompt — voice, instruments and arrangement",open=False):
-        gr.Markdown("Start with a clear genre, instrument list and vocal delivery. These are model "
-            "instructions; they cannot guarantee a natural voice or recreate an existing song. "
-            "Your lyrics stay in the main Lyrics field. Use [Verse] and [Chorus] section headings. "
-            "[ACE-Step musician guide](https://github.com/ace-step/ACE-Step-1.5/blob/main/docs/en/ace_step_musicians_guide.md)")
+    with gr.Accordion("✨ Help me describe my song",open=False):
+        gr.Markdown("Pick a starting point, adjust it, then press **Apply**.")
         preset = gr.Dropdown(list(PRESETS),value="Female melodic metal",label="Starting point")
         load = gr.Button("Load starting point into builder")
         defaults = PRESETS["Female melodic metal"]

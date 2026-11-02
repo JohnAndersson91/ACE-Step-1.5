@@ -4,7 +4,7 @@ import gradio as gr
 
 def build_workflow_guide() -> None:
     """Display concise routes to the actual generation and separation controls."""
-    with gr.Accordion("Start here — choose what you want to make", open=True):
+    with gr.Accordion("Help with the different tools", open=False):
         gr.Markdown("""**Create an original song:** choose Custom, describe the music, add lyrics,
 then Generate Music. Check Instrumental if you do not want vocals.
 

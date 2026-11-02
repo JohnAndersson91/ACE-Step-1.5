@@ -88,10 +88,6 @@ def build_generate_row_controls(
     params = init_params or {}
     generate_btn_interactive = params.get("enable_generate", False) if service_pre_initialized else False
     with gr.Row(equal_height=True, visible=True) as generate_btn_row:
-        think_checkbox, auto_score = _build_left_generate_toggles(
-            lm_initialized=lm_initialized,
-            service_mode=service_mode,
-        )
         with gr.Column(scale=18):
             generate_btn = gr.Button(
                 t("generation.generate_btn"),
@@ -100,7 +96,11 @@ def build_generate_row_controls(
                 interactive=generate_btn_interactive,
                 elem_id="acestep-generate-btn",
             )
-        autogen_checkbox, auto_lrc = _build_right_generate_toggles(service_mode=service_mode)
+    with gr.Accordion("Automatic options",open=False):
+        with gr.Row():
+            think_checkbox, auto_score = _build_left_generate_toggles(
+                lm_initialized=lm_initialized,service_mode=service_mode)
+            autogen_checkbox, auto_lrc = _build_right_generate_toggles(service_mode=service_mode)
     return {
         "think_checkbox": think_checkbox,
         "auto_score": auto_score,

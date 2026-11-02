@@ -70,15 +70,14 @@ def transcribe_lyrics(path: str) -> str:
     return "\n".join(segment.text.strip() for segment in segments)
 
 
-def build_practice_controls(source: gr.Audio, lyrics: gr.Textbox) -> None:
+def build_practice_controls(source: gr.Audio, lyrics: gr.Textbox, expanded: bool = False) -> None:
     """Build a practice workspace that also displays the generation lyrics."""
-    with gr.Accordion("Vocal practice, stems and lyrics", open=False):
-        gr.Markdown("Import/upload a song above, then separate it. CPU separation can take a few minutes.")
+    with gr.Accordion("Make a backing & record", open=expanded):
+        gr.Markdown("Add your song using **📂 Add a song** above.")
         split = gr.Button("Make instrumental from source song", variant="primary")
         quality = gr.Radio(["Quick", "Higher quality (slower)", "RoFormer (test)"], value="RoFormer (test)",
                            label="Separation quality")
-        gr.Markdown("Separation preserves the recording's timing but can leave artifacts. "
-                    "An exact clean instrumental is not guaranteed. Remix generation changes the music.")
+        gr.Markdown("Vocal removal can leave some voice or artifacts.")
         instrumental = gr.Audio(label="Instrumental backing", type="filepath")
         vocals = gr.Audio(label="Isolated vocals / vocal recording", type="filepath")
         from acestep.vocal_recording import build_recorder

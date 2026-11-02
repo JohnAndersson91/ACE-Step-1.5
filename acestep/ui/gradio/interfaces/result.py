@@ -155,7 +155,7 @@ def create_results_section(dit_handler) -> dict:
             variant="secondary", interactive=False, size="sm"
         )
         
-        with gr.Accordion(t("results.batch_results_title"), open=True):
+        with gr.Accordion(t("results.batch_results_title"), open=False):
             generated_audio_batch = gr.File(
                 label=t("results.all_files_label"),
                 file_count="multiple", interactive=False

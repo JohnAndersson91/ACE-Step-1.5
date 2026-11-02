@@ -315,8 +315,7 @@ def create_gradio_interface(dit_handler, llm_handler, dataset_handler, init_para
         
         gr.HTML(f"""
         <div class="main-header">
-            <h1>{t("app.title")}</h1>
-            <p>{t("app.subtitle")}</p>
+            <h1>🎵 My Music Studio</h1>
         </div>
         """)
         create_help_button("getting_started")

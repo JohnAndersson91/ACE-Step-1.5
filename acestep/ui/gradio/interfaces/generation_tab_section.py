@@ -72,34 +72,33 @@ def create_generation_tab_section(
     initial_mode_choices = GENERATION_MODES_BASE if is_pure_base_model else GENERATION_MODES_TURBO
 
     with gr.Group():
-        build_workflow_guide()
-        mode_controls = build_mode_selector_controls(initial_mode_choices)
         hidden_state_controls = build_hidden_generation_state()
-        simple_mode_controls = build_simple_mode_controls()
-        source_track_code_controls = build_source_track_and_code_controls()
-        build_reconstruction_ui(source_track_code_controls["src_audio"])
-        build_correction_lab()
-        build_transcription_options()
-        # Retake + Edit accordion sits right under LM codes Hints so the
-        # variation knobs are next to the source-audio inputs they apply to.
-        variation_morph_controls = build_variation_morph_controls()
-        cover_controls = build_cover_strength_controls()
-        custom_mode_controls = build_custom_mode_controls()
-        build_song_prompt(custom_mode_controls["captions"], custom_mode_controls["instrumental_checkbox"])
-        build_practice_controls(source_track_code_controls["src_audio"], custom_mode_controls["lyrics"])
-        repainting_controls = build_repainting_controls()
-        optional_controls = build_optional_parameter_controls(
-            max_duration=max_duration,
-            max_batch_size=max_batch_size,
-            default_batch_size=default_batch_size,
-            service_mode=service_mode,
-        )
-        generate_controls = build_generate_row_controls(
-            service_pre_initialized=service_pre_initialized,
-            init_params=init_params,
-            lm_initialized=lm_initialized,
-            service_mode=service_mode,
-        )
+        with gr.Accordion("📂 Add a song",open=False):
+            source_track_code_controls = build_source_track_and_code_controls()
+        with gr.Tabs():
+            with gr.Tab("🎵 Create a song"):
+                with gr.Accordion("Mode: new song, remix or repair",open=False):
+                    mode_controls = build_mode_selector_controls(initial_mode_choices)
+                    cover_controls = build_cover_strength_controls()
+                    repainting_controls = build_repainting_controls()
+                simple_mode_controls = build_simple_mode_controls()
+                custom_mode_controls = build_custom_mode_controls()
+                build_song_prompt(custom_mode_controls["captions"], custom_mode_controls["instrumental_checkbox"])
+                optional_controls = build_optional_parameter_controls(
+                    max_duration=max_duration,max_batch_size=max_batch_size,
+                    default_batch_size=default_batch_size,service_mode=service_mode)
+                generate_controls = build_generate_row_controls(
+                    service_pre_initialized=service_pre_initialized,init_params=init_params,
+                    lm_initialized=lm_initialized,service_mode=service_mode)
+            with gr.Tab("🎤 Sing & record"):
+                build_practice_controls(source_track_code_controls["src_audio"],
+                    custom_mode_controls["lyrics"],expanded=True)
+            with gr.Tab("🛠 More tools"):
+                variation_morph_controls = build_variation_morph_controls()
+                build_reconstruction_ui(source_track_code_controls["src_audio"])
+                build_correction_lab()
+                build_transcription_options()
+                build_workflow_guide()
 
     result: dict[str, Any] = {}
     result.update(mode_controls)
