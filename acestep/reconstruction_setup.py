@@ -9,6 +9,9 @@ def main() -> None:
     path.parent.mkdir(parents=True,exist_ok=True)
     if not path.exists():
         urlretrieve("https://raw.githubusercontent.com/schellingb/TinySoundFont/master/examples/florestan-subset.sf2",path)
+    complete = path.parent / "GeneralUser-GS.sf2"
+    if not complete.exists():
+        urlretrieve("https://raw.githubusercontent.com/mrbumpy409/GeneralUser-GS/main/GeneralUser-GS.sf2",complete)
     print("Reconstruction prototype ready. Basic Pitch is installed without its outdated "
           "TensorFlow/numpy pins; this setup uses its ONNX model with the existing runtime.")
 

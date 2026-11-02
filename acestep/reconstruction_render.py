@@ -3,12 +3,13 @@ import numpy as np
 import tinysoundfont
 
 
-def render_notes(midi, soundfont: str, duration: float, preset: int) -> np.ndarray:
+def render_notes(midi, soundfont: str, duration: float, preset: int,
+                 bank: int = 0, is_drums: bool = False) -> np.ndarray:
     """Render a MIDI note estimate with one chosen SoundFont preset."""
     rate = 44100
     synth = tinysoundfont.Synth(samplerate=rate)
     sfid = synth.sfload(soundfont)
-    synth.program_select(0, sfid, 0, preset)
+    synth.program_select(0, sfid, bank, preset, is_drums=is_drums)
     events = []
     for instrument in midi.instruments:
         for note in instrument.notes:
