@@ -124,6 +124,8 @@ def create_results_section(dit_handler) -> dict:
                 cols_5_8.append(_create_audio_column(i, visible=True))
         
         all_cols = cols_1_4 + cols_5_8
+        from acestep.audio_review_ui import build_audio_review
+        build_audio_review(all_cols[0]["generated_audio"],all_cols[1]["generated_audio"])
         
         status_output = gr.Textbox(label=t("results.generation_status"), interactive=False)
         
