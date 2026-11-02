@@ -24,11 +24,13 @@ def build_session(output_audio: gr.Audio | None = None) -> None:
     recording = gr.Audio(label="Record my voice", sources=["microphone", "upload"],
                          type="filepath", format="wav")
     recording.start_recording(fn=None, js="""() => {
-      const audio = document.querySelector('#practice-session-backing audio');
+      const audio = [...document.querySelectorAll('#practice-session-backing audio')]
+        .find(item => item.src);
       if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
     }""")
     recording.stop_recording(fn=None, js="""() => {
-      const audio = document.querySelector('#practice-session-backing audio');
+      const audio = [...document.querySelectorAll('#practice-session-backing audio')]
+        .find(item => item.src);
       if (audio) audio.pause();
     }""")
     saved = output_audio if output_audio is not None else gr.File(label="Saved vocal take")
