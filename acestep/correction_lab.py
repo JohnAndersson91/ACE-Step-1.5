@@ -78,14 +78,23 @@ def build_correction_lab() -> None:
         chords = gr.Dataframe(headers=["start","end","chord guess"],
             datatype=["number","number","str"],type="array",interactive=True)
         replace = gr.Checkbox(value=False,label="Replace accompaniment with my edited chord table")
-        with gr.Row():
-            original = gr.Audio(label="Original excerpt — level matched",interactive=False,
-                                elem_id="correction-original")
-            piano = gr.Audio(label="Piano from current notes — level matched",interactive=False,
-                             elem_id="correction-piano")
-        build_comparison_player()
+        comparison = build_comparison_player()
         render = gr.Button("Render piano from edited notes")
         midi = gr.File(label="Edited MIDI files",file_count="multiple")
         status = gr.Textbox(label="Correction status",interactive=False)
-        load.click(load_session,outputs=[notes,chords,original,piano,duration,status])
-        render.click(render_edits,[notes,chords,replace,duration],[original,piano,midi,notes,status])
+        load.click(load_workspace,outputs=[notes,chords,comparison,duration,status])
+        render.click(render_workspace,[notes,chords,replace,duration],[comparison,midi,notes,status])
+
+
+def load_workspace():
+    """Adapt saved files into a single self-contained native A/B player."""
+    from acestep.comparison_player import comparison_markup
+    notes,chords,original,piano,duration,status = load_session()
+    return notes,chords,comparison_markup(original,piano),duration,status
+
+
+def render_workspace(rows, chords, replace, duration):
+    """Refresh the self-contained comparison after rendering user edits."""
+    from acestep.comparison_player import comparison_markup
+    original,piano,midi,notes,status = render_edits(rows,chords,replace,duration)
+    return comparison_markup(original,piano),midi,notes,status
