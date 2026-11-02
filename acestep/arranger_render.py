@@ -6,6 +6,7 @@ import pretty_midi
 import soundfile as sf
 
 from acestep.reconstruction_render import render_notes
+from acestep.arrangement_register import fit_register
 
 
 LAYOUTS = {
@@ -26,12 +27,16 @@ def render_arrangement(score: dict, soundfont: str, duration: float, layout: str
         if part == "melody" and not include_melody:
             continue
         midi = copy.deepcopy(score[part])
+        shifted = 0
+        if layout == "Acoustic guitar":
+            midi,shifted = fit_register(midi,40,88)
         for instrument in midi.instruments:
             instrument.program = program
             instrument.is_drum = part == "drums"
         combined.instruments.extend(midi.instruments)
         mix += render_notes(midi,soundfont,duration,program,bank,part=="drums")*gain
         audit[part] = {"program":program,"bank":bank,
+                       "octave_shifted_notes":shifted,
                        "notes":sum(len(i.notes) for i in midi.instruments)}
     peak = float(np.max(abs(mix)))
     if not np.isfinite(mix).all() or peak <= 1e-8:

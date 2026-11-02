@@ -13,9 +13,13 @@ Vocal practice, stems and lyrics and press Make instrumental from source song.
 RoFormer is a new test option; separation preserves timing but can leave artifacts.
 
 **Rebuild notes as instruments (experimental):** import Source Audio and open
-Rebuild instrumental — experimental musical sketch. Start with 25 seconds. It estimates
+Arrange a song — controlled piano, guitar and rock tests. Start with 25 seconds. It estimates
 bass/accompaniment notes and drum hits, renders new samples, and exports editable MIDI.
 It does not faithfully reconstruct the original performance or instrument tones.
+
+Use the correction workspace to inspect the estimated notes and piano roll. To try a
+different transcription engine, open Other transcription tools / import their MIDI.
+Those external engines are optional and have not been installed or benchmarked here.
 
 **Reimagine the accompaniment (experimental):** choose Remix, provide the song as Source
 Audio, check Instrumental and describe the new arrangement. Notes and timing may change.

@@ -13,19 +13,27 @@ def render_notes(midi, soundfont: str, duration: float, preset: int,
     events = []
     for instrument in midi.instruments:
         for note in instrument.notes:
-            events.extend([(int(note.start*rate), 1, note.pitch, note.velocity),
+            events.extend([(int(note.start*rate), 3, note.pitch, note.velocity),
                            (int(note.end*rate), 0, note.pitch, 0)])
+        for bend in instrument.pitch_bends:
+            events.append((int(bend.time*rate),2,bend.pitch+8192,0))
+        for control in instrument.control_changes:
+            events.append((int(control.time*rate),1,control.number,control.value))
     events.sort()
     output = np.zeros((int(duration*rate), 2), np.float32)
     cursor = 0
-    for frame, is_on, pitch, velocity in events:
+    for frame, kind, pitch, velocity in events:
         frame = min(len(output), max(cursor, frame))
         if frame > cursor:
             output[cursor:frame] = np.frombuffer(synth.generate(frame-cursor), np.float32).reshape(-1,2)
-        if is_on:
+        if kind == 3:
             synth.noteon(0, pitch, velocity)
-        else:
+        elif kind == 0:
             synth.noteoff(0, pitch)
+        elif kind == 2:
+            synth.pitchbend(0,min(16383,max(0,pitch)))
+        elif kind == 1:
+            synth.control_change(0,pitch,velocity)
         cursor = frame
     if cursor < len(output):
         output[cursor:] = np.frombuffer(synth.generate(len(output)-cursor), np.float32).reshape(-1,2)

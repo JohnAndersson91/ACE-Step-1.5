@@ -78,6 +78,8 @@ def build_correction_lab() -> None:
         chords = gr.Dataframe(headers=["start","end","chord guess"],
             datatype=["number","number","str"],type="array",interactive=True)
         replace = gr.Checkbox(value=False,label="Replace accompaniment with my edited chord table")
+        from acestep.score_review import build_score_review
+        build_score_review(notes,duration)
         comparison = build_comparison_player()
         render = gr.Button("Render piano from edited notes")
         midi = gr.File(label="Edited MIDI files",file_count="multiple")
