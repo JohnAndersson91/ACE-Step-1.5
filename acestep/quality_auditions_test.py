@@ -9,7 +9,9 @@ import numpy as np
 import soundfile as sf
 
 from acestep.comparison_player import build_comparison_player
-from acestep.quality_auditions import available_auditions, compare_saved_audition
+from acestep.quality_auditions import (
+    available_auditions, clear_saved_audition, compare_saved_audition,
+)
 
 
 class QualityAuditionsTests(unittest.TestCase):
@@ -51,6 +53,14 @@ class QualityAuditionsTests(unittest.TestCase):
         player = build_comparison_player(labels=("Current settings", "Selected test"), visible=False)
         self.assertIn("Selected test", player.value)
         self.assertFalse(player.visible)
+
+    def test_selection_change_removes_previous_audio(self):
+        """An old sampler test cannot remain playable under a new decoder selection."""
+        update, report = clear_saved_audition()
+        self.assertFalse(update["visible"])
+        self.assertNotIn("base64,", update["value"])
+        self.assertIn('src=""', update["value"])
+        self.assertIsNone(report)
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ from pathlib import Path
 import gradio as gr
 
 from acestep.audio_review import compare_versions
-from acestep.comparison_player import build_comparison_player
+from acestep.comparison_player import build_comparison_player, comparison_markup
 
 ROOT = Path(__file__).resolve().parents[1] / "acestep_output/quality-tests"
 BASELINE = "A - current settings"
@@ -27,6 +27,12 @@ def compare_saved_audition(choice, start, duration):
     return gr.update(value=markup, visible=True), report
 
 
+def clear_saved_audition():
+    """Remove the old audio when selection changes so its identity cannot be mistaken."""
+    markup = comparison_markup(labels=("Current settings", "Selected test"))
+    return gr.update(value=markup, visible=False), None
+
+
 def build_quality_auditions():
     """Expose actual completed tests, without changing any normal generation settings."""
     files = available_auditions()
@@ -46,3 +52,5 @@ def build_quality_auditions():
         with gr.Accordion("Technical measurements", open=False):
             report = gr.JSON(label="Levels — not a musical-quality score")
         action.click(compare_saved_audition, [choice, start, duration], [player, report])
+        for control in (choice, start, duration):
+            control.change(clear_saved_audition, outputs=[player, report])
