@@ -2,6 +2,7 @@
 import re
 
 import gradio as gr
+from acestep.performance_constraints import validate_delivery
 
 
 PROFILE_SOURCE = "https://www.nuclearblast.com/blogs/news/children-of-bodom-enter-the-studio-2877191"
@@ -39,8 +40,8 @@ def shape_style(text,tempo,power,rasp,natural,language,voice="Female"):
         raise gr.Error("Choose 30–240 BPM, or leave tempo empty.")
     powers = {"Natural":"expressive lead vocal with clear diction",
         "Powerful":"full-bodied lead vocal, strong chest voice, confident projection and dynamic attack",
-        "Epic":"commanding full-bodied lead vocal, strong chest voice, soaring anthemic choruses and emotional intensity"}
-    rasps = {"Clean throughout":"clean melodic singing throughout",
+        "Epic":"commanding projected rock lead in a supported upper-middle register, assertive powerful verses, soaring anthemic choruses, rounded open vowels and emotional intensity without piercing shrillness"}
+    rasps = {"Clean throughout":"clean melodic rock singing throughout, smooth firm sustained notes and clean phrase endings; vocal power comes from projection rather than gritty distortion",
         "A few transitions":"mostly clean melodic singing; on only two climactic lines, gradually add grit and rasp "
             "within the same sung phrase, crest briefly into a human metal scream, then return to clean singing; "
             "keep other lines clean; no guttural or creature-like delivery",
@@ -53,6 +54,7 @@ def shape_style(text,tempo,power,rasp,natural,language,voice="Female"):
     if language not in VALID_LANGUAGES or language=="unknown":
         raise gr.Error("Choose a supported vocal language.")
     expanded,matches = expand_style_request(text)
+    validate_delivery(expanded, rasp)
     parts = [powers[power],rasps[rasp]]
     if voice!="Unspecified":
         parts.insert(0,f"{voice.lower()} lead singer")

@@ -13,7 +13,7 @@ def build_style_direction(custom,options):
         tempo = gr.Number(value=None,label="Tempo (BPM) · optional",minimum=30,maximum=240)
         voice = gr.Radio(["Female","Male","Unspecified"],value="Female",label="Lead voice")
         power = gr.Radio(["Natural","Powerful","Epic"],value="Epic",label="Vocal power · requested")
-        rasp = gr.Radio(["Clean throughout","A few transitions","Mostly harsh"],value="A few transitions",
+        rasp = gr.Radio(["Clean throughout","A few transitions","Mostly harsh"],value="Clean throughout",
             label="Clean → rasp → scream · requested")
         natural = gr.Checkbox(value=True,label="Ask for natural pitch and less synthetic vocal layering")
         names = {"en":"English","sv":"Swedish","fi":"Finnish","de":"German","ja":"Japanese",

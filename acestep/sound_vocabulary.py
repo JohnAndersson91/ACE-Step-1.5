@@ -6,6 +6,8 @@ These descriptions are instructions, not samples, new model weights, or a timbre
 """
 
 INSTRUMENTS = {
+    "High-gain metal rhythm guitar": "amplified electric rhythm guitar through a high-gain valve amp and speaker cabinet, tight low-string palm-muted riffs, audible pick attacks, crunchy power chords and controlled string sustain",
+    "Amp-driven metal lead guitar": "amplified electric lead guitar through a driven amp and speaker cabinet, articulate picked string attacks, fluid legato, string bends, wide guitar vibrato and harmonized melodic runs",
     "Clean electric guitar": "picked clean electric guitar, string attack, ringing notes and expressive bends",
     "Heavy rhythm guitar": "overdriven electric rhythm guitar, distinct palm-muted attacks and sustained chords",
     "Melodic lead guitar": "electric lead guitar with articulated picked runs, bends and harmonized melodic lines",
@@ -39,7 +41,8 @@ INSTRUMENTS = {
 DELIVERIES = {
     "Keep my request": "",
     "Clean and intimate": "close expressive melodic singing, restrained vibrato and clear words",
-    "Powerful clean belting": "full-bodied chest voice opening into powerful clean melodic belts",
+    "Powerful clean belting": "projected full-voiced clean rock singing, supported upper-middle register, firm melodic attacks and sustained clean belts",
+    "Clean and powerful throughout": "clean melodic rock singing throughout, assertive projected verses and soaring powerful choruses, supported upper-middle register, open rounded vowels, firm clear tone, controlled vibrato and smooth sustained notes; retain vocal power without breathy crooning, gritty distortion or piercing shrillness",
     "Breathy and gentle": "gentle breathy singing with soft phrase beginnings and clear words",
     "Clean → rasp → brief scream": "mostly clear melodic singing; on only two phrase peaks, the same lead singer moves continuously from a clean sustained vowel through increasing rasp into a brief pitched scream on that SAME word, then returns to clean singing; preserve the singer's register and identity across the transition",
     "Raspy throughout": "textured raspy melodic singing with intelligible words and connected phrasing",
@@ -48,6 +51,7 @@ DELIVERIES = {
 }
 
 PRODUCTION = {
+    "Dry guitar-led metal band": "guitar-led metal band recording, close-miked amp cabinets, defined pick attacks and rhythmic power chords, solid electric bass and a punchy acoustic drum kit; direct solo lead vocal, controlled cymbal brightness, clear midrange separation and restrained room reverb",
     "Keep my request": "",
     "Natural band recording": "distinct band instruments, human playing dynamics, clear drum transients and realistic note decay; lead vocal forward with restrained doubling and preserved natural pitch movement",
     "Intimate acoustic": "close acoustic recording, natural room resonance, gentle dynamics and a clear exposed lead vocal",
@@ -57,8 +61,8 @@ PRODUCTION = {
 
 VOICES = {
     "Keep my request": "",
-    "One female singer": "one female lead singer throughout every verse, chorus and vocal-intensity change; all clean, raspy and screamed notes belong to this SAME female singer; any backing layers are performed by this same female singer",
-    "One male singer": "one male lead singer throughout every verse, chorus and vocal-intensity change; all clean, raspy and screamed notes belong to this SAME male singer; any backing layers are performed by this same male singer",
+    "One female singer": "one solo female lead throughout every section; every vocal phrase belongs to this SAME female singer, with one consistent vocal identity and no guest vocalist or choir",
+    "One male singer": "one solo male lead throughout every section; every vocal phrase belongs to this SAME male singer, with one consistent vocal identity and no guest vocalist or choir",
     "Duet": "two distinct lead singers performing a duet with clearly separated phrases",
     "Choir": "a coordinated vocal choir with distinct harmonies and supported ensemble phrasing",
     "Instrumental": "instrumental music without sung or spoken voices",

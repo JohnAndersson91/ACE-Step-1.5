@@ -4,6 +4,9 @@ import re
 import gradio as gr
 
 from acestep.sound_vocabulary import DELIVERIES, INSTRUMENTS, PRODUCTION, VOICES
+from acestep.performance_constraints import (
+    CLEAN_DELIVERIES, replace_managed_direction, validate_delivery,
+)
 
 MARKER = "\n\nSound palette:\n"
 
@@ -11,6 +14,7 @@ MARKER = "\n\nSound palette:\n"
 def compile_palette(caption, intro, main, voice, delivery, production):
     """Preserve the user's story and scope sound choices without changing lyric words."""
     caption = str(caption or "").split(MARKER, 1)[0].strip()
+    caption = replace_managed_direction(caption, delivery).strip()
     intro, main = intro or [], main or []
     if not isinstance(intro, list) or not isinstance(main, list) or len(intro) + len(main) > 8:
         raise gr.Error("Choose up to eight instrument entries across the intro and main song.")
@@ -22,6 +26,7 @@ def compile_palette(caption, intro, main, voice, delivery, production):
         raise gr.Error("Shorten the existing description to 3200 characters before adding sound choices.")
     if voice == "Instrumental" and delivery != "Keep my request":
         raise gr.Error("For an instrumental, leave vocal delivery at Keep my request.")
+    validate_delivery(caption, delivery)
     other = {"One female singer": "male", "One male singer": "female"}.get(voice)
     if other:
         for match in re.finditer(rf"\b{other}\s+(?:lead\s+)?(?:singer|vocals?|vocalist|voice)\b", caption, re.I):
@@ -42,9 +47,11 @@ def compile_palette(caption, intro, main, voice, delivery, production):
 
 
 def performance_lyrics(lyrics, voice, delivery):
-    """For continuous solo-vocal transitions, remove separate scream-role headings only."""
+    """Remove separate harsh-role headings for explicit clean or continuous solo delivery."""
     text = str(lyrics or "")
-    if voice not in {"One female singer", "One male singer"} or delivery != "Clean → rasp → brief scream":
+    if voice not in {"One female singer", "One male singer"} or (
+        delivery != "Clean → rasp → brief scream" and delivery not in CLEAN_DELIVERIES
+    ):
         return text
     return re.sub(r"(?im)^[ \t]*\[(?:scream|screaming|growl|growling)\][ \t]*\r?\n?", "", text)
 
@@ -59,6 +66,6 @@ def apply_palette(caption, intro, main, voice, delivery, production, lyrics, sav
         gr.skip() if voice == "Keep my request" else False)
     remembered = saved_lyrics if was_instrumental and not restore_vocals else updated
     status = ("Sound choices applied. Lyrics words are kept; separate scream/growl headings are removed "
-        "only for continuous solo-vocal transitions. These are model instructions, not new sound samples "
+        "for explicit clean solo vocals or continuous solo-vocal transitions. These are model instructions, not new sound samples "
         "or a guarantee of realistic instruments or a fixed singer identity.")
     return compiled, instrumental, updated, remembered, status
