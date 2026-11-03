@@ -22,9 +22,10 @@ def comparison_markup(original: str | None = None, piano: str | None = None,
     step="0.01" value="0.2"></label><p data-status>Playback stopped.</p></div>'''
 
 
-def build_comparison_player():
+def build_comparison_player(labels=None, visible=True):
     """Switch at the current playhead with an independent, low default listening volume."""
-    return gr.HTML(value=comparison_markup(),
+    markup = comparison_markup(labels=labels) if labels is not None else comparison_markup()
+    return gr.HTML(value=markup, visible=visible,
     js_on_load="""
     let current = null, position = 0;
     const media = side => element.querySelector('audio[data-'+side+']');
