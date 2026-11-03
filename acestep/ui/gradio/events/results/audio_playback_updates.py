@@ -28,7 +28,15 @@ def build_audio_slot_update(
     update_kwargs = {
         "value": audio_path,
         "playback_position": 0,
+        "autoplay": False,
     }
+    if audio_path:
+        from acestep.audio_artifact_gate import checked_playback_path
+        checked, notice = checked_playback_path(audio_path)
+        update_kwargs["value"] = checked
+        if notice:
+            label = notice
+            interactive = False
     if label is not None:
         update_kwargs["label"] = label
     if interactive is not None:

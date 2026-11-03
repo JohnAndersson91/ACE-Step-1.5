@@ -1,5 +1,13 @@
 # AGENTS.md
 
+## Local listening review
+
+The user has reported painful ringing/spikes in generated clips. Keep the persisted listening
+hold enabled until the user explicitly chooses to resume. Do not test by playing audio or
+embed new audio previews in chat while this hold is active. Inspect files with the spectral
+screen and show timestamped reports/plots instead. An unflagged result is not a hearing-safety
+certification. Preserve original recordings and do not install new analyzers without approval.
+
 Guidance for AI coding agents working in `ace-step/ACE-Step-1.5`.
 
 This document is aligned with the intent from:

@@ -9,17 +9,22 @@ def comparison_markup(original: str | None = None, piano: str | None = None,
                       labels: tuple[str,str] = ("Original excerpt — level matched",
                                                "Piano from current notes — level matched")) -> str:
     """Keep both native audio elements inside the same component for reliable control."""
+    from acestep.audio_artifact_gate import checked_playback_path
+    original, notice_a = checked_playback_path(original)
+    piano, notice_b = checked_playback_path(piano)
+    notice = notice_a or notice_b
+    disabled = " disabled" if notice else ""
     def source(path):
         return "data:audio/wav;base64,"+base64.b64encode(Path(path).read_bytes()).decode() if path else ""
     return f'''<div><p>{html.escape(labels[0])}</p>
     <audio data-original controls preload="metadata" src="{source(original)}"></audio>
     <p>{html.escape(labels[1])}</p>
     <audio data-piano controls preload="metadata" src="{source(piano)}"></audio>
-    <p><button data-side="original">Play first version</button>
-    <button data-side="piano">Switch to second at same position</button>
+    <p><button data-side="original"{disabled}>Play first version</button>
+    <button data-side="piano"{disabled}>Switch to second at same position</button>
     <button data-stop>Stop both</button></p>
     <label>Listening volume <input data-volume type="range" min="0" max="1"
-    step="0.01" value="0.2"></label><p data-status>Playback stopped.</p></div>'''
+    step="0.01" value="0.2"></label><p data-status>{html.escape(notice or 'Playback stopped.')}</p></div>'''
 
 
 def build_comparison_player(labels=None, visible=True):

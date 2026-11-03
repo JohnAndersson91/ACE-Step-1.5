@@ -17,6 +17,12 @@ from acestep.quality_auditions import (
 class QualityAuditionsTests(unittest.TestCase):
     """Check completed-file discovery and the real comparison path."""
 
+    def setUp(self):
+        """Run comparison tests independently of the user's persistent preview pause."""
+        hold = patch("acestep.audio_artifact_gate.listening_hold", return_value=False)
+        hold.start()
+        self.addCleanup(hold.stop)
+
     def test_requires_baseline_and_only_lists_wavs(self):
         """A partial render cannot expose a misleading baseline comparison."""
         with tempfile.TemporaryDirectory() as folder:

@@ -24,4 +24,7 @@ def get_audio_player_preferences_head() -> str:
         audio preference JavaScript payload.
     """
     script_source = _load_preferences_script()
+    from acestep.audio_artifact_gate import listening_hold
+    paused = "true" if listening_hold() else "false"
+    script_source = f"window.acestepListeningHold = {paused};\n" + script_source
     return f"<script>\n{script_source}\n</script>"

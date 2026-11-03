@@ -257,6 +257,23 @@
         wasReadyBeforeLoad.set(player, false);
         applyPreferredVolume(player);
 
+        const applyListeningHold = () => {
+            if (window.acestepListeningHold === true) {
+                if (player.dataset.acestepHoldMuted === undefined) {
+                    player.dataset.acestepHoldMuted = player.muted ? "1" : "0";
+                }
+                player.muted = true;
+                player.pause();
+            } else if (player.dataset.acestepHoldMuted !== undefined) {
+                player.muted = player.dataset.acestepHoldMuted === "1";
+                delete player.dataset.acestepHoldMuted;
+            }
+        };
+        player.autoplay = false;
+        applyListeningHold();
+        player.addEventListener("play", applyListeningHold);
+        player.addEventListener("loadeddata", applyListeningHold);
+
         player.addEventListener("volumechange", (event) => {
             const next = clampVolume(player.volume);
             if (next === null) {

@@ -69,6 +69,16 @@ class AudioPlayerPreferencesHeadTests(unittest.TestCase):
         script_2 = get_audio_player_preferences_head()
         self.assertEqual(script_1, script_2)
 
+    def test_listening_hold_mutes_players_without_starting_playback(self):
+        """The pause is seeded before players register and never calls play()."""
+        from unittest.mock import patch
+        with patch("acestep.audio_artifact_gate.listening_hold", return_value=True):
+            script = get_audio_player_preferences_head()
+        self.assertIn("window.acestepListeningHold = true", script)
+        self.assertIn("player.muted = true", script)
+        self.assertIn('player.addEventListener("play", applyListeningHold)', script)
+        self.assertIn("player.autoplay = false", script)
+
 
 if __name__ == "__main__":
     unittest.main()

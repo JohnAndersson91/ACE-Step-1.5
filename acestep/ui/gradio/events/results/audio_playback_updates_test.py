@@ -3,6 +3,7 @@
 import importlib.util
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 
 
 def _load_module():
@@ -30,6 +31,13 @@ class _FakeGr:
 class AudioPlaybackUpdatesTests(unittest.TestCase):
     """Behavior tests for audio playback update builders."""
 
+    def setUp(self):
+        """Keep payload tests separate from filesystem/spectral screening."""
+        guard = patch("acestep.audio_artifact_gate.checked_playback_path",
+                      side_effect=lambda path: (path, None))
+        guard.start()
+        self.addCleanup(guard.stop)
+
     def test_build_audio_slot_update_sets_value_and_rewinds(self):
         """Success path: slot update should carry path and playback reset."""
         sample_path = "sample.flac"
@@ -43,6 +51,7 @@ class AudioPlaybackUpdatesTests(unittest.TestCase):
         self.assertEqual(result["playback_position"], 0)
         self.assertEqual(result["label"], "Sample 1 (Ready)")
         self.assertFalse(result["interactive"])
+        self.assertFalse(result["autoplay"])
 
     def test_build_audio_slot_update_clear_path_rewinds(self):
         """Regression path: clearing a slot should still force playback to start."""
